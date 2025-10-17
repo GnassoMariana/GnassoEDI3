@@ -8,12 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.6" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GnassoEDI3.Abstractions\GnassoEDI3.Abstractions.csproj" />
     <ProjectReference Include="..\GnassoEDI3.algo\GnassoEDI3.Repository.csproj" />
-    <ProjectReference Include="..\GnassoEDI3.Entities\GnassoEDI3.Entities.csproj" />
   </ItemGroup>
 
 </Project>

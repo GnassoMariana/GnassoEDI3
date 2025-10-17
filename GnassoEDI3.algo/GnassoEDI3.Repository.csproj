@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GnassoEDI3.algo\GnassoEDI3.Repository.csproj" />
+    <ProjectReference Include="..\GnassoEDI3.Abstractions\GnassoEDI3.Abstractions.csproj" />
+    <ProjectReference Include="..\GnassoEDI3.DataAccess\GnassoEDI3.DataAccess.csproj" />
     <ProjectReference Include="..\GnassoEDI3.Entities\GnassoEDI3.Entities.csproj" />
   </ItemGroup>
 

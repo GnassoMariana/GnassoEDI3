@@ -1,25 +1,58 @@
+﻿
+
+using GnassoEDI3.DataAccess;
+using GnassoEDI3.Repository.IRepositories;
+using GnassoEDI3.Repository.Repositories;
+using GnassoEDI3.Services.Interfaces;
+using GnassoEDI3.Services.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddDbContext<DbDataAccess>(options =>
+{
+    
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        o => o.MigrationsAssembly("GnassoEDI3.WebApi")
+    );
+
+    
+    options.UseLazyLoadingProxies();
+});
+
+
+builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IRegistroAsistenciaRepository, RegistroAsistenciaRepository>();
+builder.Services.AddScoped<IReporteMensualRepository, ReporteMensualRepository>();
+
+builder.Services.AddScoped<IEmpleadoService, EmpleadoService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IRegistroAsistenciaService, RegistroAsistenciaService>();
+builder.Services.AddScoped<IReporteMensualService, ReporteMensualService>();
+
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+
+
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
 app.UseAuthorization();
-
-app.MapRazorPages();
+app.MapControllers();
 
 app.Run();
+
