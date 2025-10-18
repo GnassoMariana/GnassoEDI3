@@ -28,7 +28,7 @@ namespace GnassoEDI3.Repository.Repositories
 
         public virtual IList<T> GetAll() => _dbSet.ToList();
 
-        public virtual T GetById(int id) => _dbSet.FirstOrDefault(e => e.Id == id);
+        public virtual T GetById(int id) => _dbSet.FirstOrDefault(e => e.Id == id)!;
 
 
         public virtual T Save(T entity)

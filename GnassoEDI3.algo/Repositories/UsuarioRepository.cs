@@ -20,13 +20,13 @@ namespace GnassoEDI3.Repository.Repositories
 
         public Usuario GetByNombreUsuario(string nombreUsuario)
         {
-            return _context.Usuarios.FirstOrDefault(u => u.NombreUsuario == nombreUsuario);
+            return _context.Usuarios.FirstOrDefault(u => u.NombreUsuario == nombreUsuario)!;
         }
 
         public Usuario Login(string nombreUsuario, string contrasena)
         {
             return _context.Usuarios.FirstOrDefault(u =>
-                u.NombreUsuario == nombreUsuario && u.Contrasena == contrasena);
+                u.NombreUsuario == nombreUsuario && u.Contrasena == contrasena)!;
         }
     }
 }

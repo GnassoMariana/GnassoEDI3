@@ -25,32 +25,5 @@ namespace GnassoEDI3.DataAccess
             optionsBuilder.LogTo(Console.WriteLine).EnableDetailedErrors();
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
-
-        //    // Configurar relación 1-1 Usuario ↔ Empleado
-        //    modelBuilder.Entity<Empleado>()
-        //        .HasOne(e => e.Usuario)
-        //        .WithOne(u => u.Empleado)
-        //        .HasForeignKey<Usuario>(u => u.EmpleadoId);
-
-        //    // Configurar relación 1-N Empleado ↔ RegistroAsistencia
-        //    modelBuilder.Entity<RegistroAsistencia>()
-        //        .HasOne(r => r.Empleado)
-        //        .WithMany(e => e.Asistencias)
-        //        .HasForeignKey(r => r.EmpleadoId);
-
-        //    // Configurar relación 1-N Empleado ↔ ReporteMensual
-        //    modelBuilder.Entity<ReporteMensual>()
-        //        .HasOne(r => r.Empleado)
-        //        .WithMany(e => e.Reportes)
-        //        .HasForeignKey(r => r.EmpleadoId);
-
-        //    // Opcional: índices únicos
-        //    modelBuilder.Entity<Usuario>()
-        //        .HasIndex(u => u.NombreUsuario)
-        //        .IsUnique();
-        //}
     }
 }

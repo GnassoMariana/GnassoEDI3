@@ -28,7 +28,7 @@ namespace GnassoEDI3.Repository.Repositories
         public ReporteMensual GetByMes(int empleadoId, int mes, int anio)
         {
             return _context.ReportesMensuales
-              .FirstOrDefault(r => r.EmpleadoId == empleadoId && r.Mes == mes && r.Anio == anio);
+              .FirstOrDefault(r => r.EmpleadoId == empleadoId && r.Mes == mes && r.Anio == anio)!;
 
         }
 
