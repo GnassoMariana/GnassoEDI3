@@ -46,5 +46,3 @@ Estructura del Proyecto
    - Descargar reportes de asistencia por mes.
 
 
-- **Nombre del desarrollador / equipo**  
-- **Correo electrónico o GitHub**
