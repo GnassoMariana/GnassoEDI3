@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{679CB0AA-3E4F-4D6A-85C9-69AB1593B9B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnassoEDI3.WebApi", "WebApplication1\GnassoEDI3.WebApi.csproj", "{679CB0AA-3E4F-4D6A-85C9-69AB1593B9B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnassoEDI3.Services", "GnassoEDI3.Services\GnassoEDI3.Services.csproj", "{CB5E53AB-E7D5-4FD5-A01A-C1451AFE004A}"
 EndProject
