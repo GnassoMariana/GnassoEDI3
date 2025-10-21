@@ -1,31 +1,33 @@
 ﻿using GnassoEDI3.Applications;
 using GnassoEDI3.Entities;
+using GnassoEDI3.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplication1.Controllers
+namespace GnassoEDI3.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UsuarioController : ControllerBase
     {
         private readonly ILogger<UsuarioController> _logger;
-        private readonly IApplication<Usuario> _usuario;
-
-        public UsuarioController(ILogger<UsuarioController> logger, IApplication<Usuario> usuario)
+        //private readonly IApplication<Usuario> _usuario;
+        private readonly IUsuarioService _usuarioService;
+        public UsuarioController(ILogger<UsuarioController> logger, IUsuarioService usuarioService)
         {
             _logger = logger;
-            _usuario = usuario;
+            //_usuario = usuario;
+            _usuarioService = usuarioService;
         }
 
         [HttpGet("All")]
-        public IActionResult All() => Ok(_usuario.GetAll());
+        public IActionResult All() => Ok(_usuarioService.GetUsuarios());
 
         [HttpGet("ById")]
         public IActionResult ById(int? id)
         {
             if (!id.HasValue) return BadRequest();
-            var usuario = _usuario.GetById(id.Value);
+            var usuario = _usuarioService.GetUsuarioById(id.Value);
             if (usuario is null) return NotFound();
             return Ok(usuario);
         }
@@ -34,7 +36,7 @@ namespace WebApplication1.Controllers
         public IActionResult Crear(Usuario usuario)
         {
             if (!ModelState.IsValid) return BadRequest();
-            _usuario.Save(usuario);
+            _usuarioService.SaveUsuario(usuario);
             return Ok(usuario.Id);
         }
 
@@ -43,14 +45,14 @@ namespace WebApplication1.Controllers
         {
             if (!id.HasValue || !ModelState.IsValid) return BadRequest();
 
-            var usuarioBack = _usuario.GetById(id.Value);
+            var usuarioBack = _usuarioService.GetUsuarioById(id.Value);
             if (usuarioBack is null) return NotFound();
 
             usuarioBack.NombreUsuario = usuario.NombreUsuario;
             usuarioBack.Contrasena = usuario.Contrasena;
             usuarioBack.EmpleadoId = usuario.EmpleadoId;
 
-            _usuario.Save(usuarioBack);
+            _usuarioService.SaveUsuario(usuarioBack);
             return Ok(usuarioBack);
         }
 
@@ -59,10 +61,10 @@ namespace WebApplication1.Controllers
         {
             if (!id.HasValue) return BadRequest();
 
-            var usuario = _usuario.GetById(id.Value);
+            var usuario = _usuarioService.GetUsuarioById(id.Value);
             if (usuario is null) return NotFound();
 
-            _usuario.Delete(id.Value);
+            _usuarioService.DeleteUsuario(id.Value);
             return Ok();
         }
     }

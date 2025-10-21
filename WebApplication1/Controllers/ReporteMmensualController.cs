@@ -1,5 +1,6 @@
 ﻿using GnassoEDI3.Applications;
 using GnassoEDI3.Entities;
+using GnassoEDI3.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,22 +11,24 @@ namespace WebApplication1.Controllers
     public class ReporteMensualController : ControllerBase
     {
         private readonly ILogger<ReporteMensualController> _logger;
-        private readonly IApplication<ReporteMensual> _reporte;
+        //private readonly IApplication<ReporteMensual> _reporte;
+        private readonly IReporteMensualService _reporteService;
 
-        public ReporteMensualController(ILogger<ReporteMensualController> logger, IApplication<ReporteMensual> reporte)
+        public ReporteMensualController(ILogger<ReporteMensualController> logger,IReporteMensualService reporteService)
         {
             _logger = logger;
-            _reporte = reporte;
+            //_reporte = reporte;
+            _reporteService = reporteService;
         }
 
         [HttpGet("All")]
-        public IActionResult All() => Ok(_reporte.GetAll());
+        public IActionResult All() => Ok(_reporteService.GetReportesMensuales());
 
         [HttpGet("ById")]
         public IActionResult ById(int? id)
         {
             if (!id.HasValue) return BadRequest();
-            var reporte = _reporte.GetById(id.Value);
+            var reporte = _reporteService.GetReporteMensualById(id.Value);
             if (reporte is null) return NotFound();
             return Ok(reporte);
         }
@@ -34,7 +37,7 @@ namespace WebApplication1.Controllers
         public IActionResult Crear(ReporteMensual reporte)
         {
             if (!ModelState.IsValid) return BadRequest();
-            _reporte.Save(reporte);
+            _reporteService.SaveReporteMensual(reporte);
             return Ok(reporte.Id);
         }
 
@@ -43,7 +46,7 @@ namespace WebApplication1.Controllers
         {
             if (!id.HasValue || !ModelState.IsValid) return BadRequest();
 
-            var reporteBack = _reporte.GetById(id.Value);
+            var reporteBack = _reporteService.GetReporteMensualById(id.Value);
             if (reporteBack is null) return NotFound();
 
             reporteBack.Mes = reporte.Mes;
@@ -51,7 +54,7 @@ namespace WebApplication1.Controllers
             reporteBack.HorasTotales = reporte.HorasTotales;
             reporteBack.EmpleadoId = reporte.EmpleadoId;
 
-            _reporte.Save(reporteBack);
+            _reporteService.SaveReporteMensual(reporteBack);
             return Ok(reporteBack);
         }
 
@@ -60,10 +63,10 @@ namespace WebApplication1.Controllers
         {
             if (!id.HasValue) return BadRequest();
 
-            var reporte = _reporte.GetById(id.Value);
+            var reporte = _reporteService.GetReporteMensualById(id.Value);
             if (reporte is null) return NotFound();
 
-            _reporte.Delete(id.Value);
+            _reporteService.DeleteReporteMensual(id.Value);
             return Ok();
         }
     }

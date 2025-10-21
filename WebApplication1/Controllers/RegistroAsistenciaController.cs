@@ -1,5 +1,6 @@
 ﻿using GnassoEDI3.Applications;
 using GnassoEDI3.Entities;
+using GnassoEDI3.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,22 +11,24 @@ namespace WebApplication1.Controllers
     public class RegistroAsistenciaController : ControllerBase
     {
         private readonly ILogger<RegistroAsistenciaController> _logger;
-        private readonly IApplication<RegistroAsistencia> _registro;
+        //private readonly IApplication<RegistroAsistencia> _registro;
+        private readonly IRegistroAsistenciaService _registroService;
 
-        public RegistroAsistenciaController(ILogger<RegistroAsistenciaController> logger, IApplication<RegistroAsistencia> registro)
+        public RegistroAsistenciaController(ILogger<RegistroAsistenciaController> logger, IRegistroAsistenciaService registroService)
         {
             _logger = logger;
-            _registro = registro;
+            //_registro = registro;
+            _registroService = registroService;
         }
 
         [HttpGet("All")]
-        public IActionResult All() => Ok(_registro.GetAll());
+        public IActionResult All() => Ok(_registroService.GetRegistroAsistencias());
 
         [HttpGet("ById")]
         public IActionResult ById(int? id)
         {
             if (!id.HasValue) return BadRequest();
-            var registro = _registro.GetById(id.Value);
+            var registro = _registroService.GetRegistroAsistenciaById(id.Value);
             if (registro is null) return NotFound();
             return Ok(registro);
         }
@@ -34,7 +37,7 @@ namespace WebApplication1.Controllers
         public IActionResult Crear(RegistroAsistencia registro)
         {
             if (!ModelState.IsValid) return BadRequest();
-            _registro.Save(registro);
+            _registroService.SaveRegistroAsistencia(registro);
             return Ok(registro.Id);
         }
 
@@ -43,7 +46,7 @@ namespace WebApplication1.Controllers
         {
             if (!id.HasValue || !ModelState.IsValid) return BadRequest();
 
-            var registroBack = _registro.GetById(id.Value);
+            var registroBack = _registroService.GetRegistroAsistenciaById(id.Value);
             if (registroBack is null) return NotFound();
 
             registroBack.Fecha = registro.Fecha;
@@ -51,7 +54,7 @@ namespace WebApplication1.Controllers
             registroBack.HoraSalida = registro.HoraSalida;
             registroBack.EmpleadoId = registro.EmpleadoId;
 
-            _registro.Save(registroBack);
+            _registroService.SaveRegistroAsistencia(registroBack);
             return Ok(registroBack);
         }
 
@@ -60,10 +63,10 @@ namespace WebApplication1.Controllers
         {
             if (!id.HasValue) return BadRequest();
 
-            var registro = _registro.GetById(id.Value);
+            var registro = _registroService.GetRegistroAsistenciaById(id.Value);
             if (registro is null) return NotFound();
 
-            _registro.Delete(id.Value);
+            _registroService.DeleteRegistroAsistencia(id.Value);
             return Ok();
         }
     }

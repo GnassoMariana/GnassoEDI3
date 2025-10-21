@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace GnassoEDI3.Entities
@@ -35,7 +36,9 @@ namespace GnassoEDI3.Entities
         // 1–1 
         [ForeignKey(nameof(Empleado))]
         public int EmpleadoId { get; set; }
-        public virtual Empleado Empleado { get; set; }
+
+        [JsonIgnore]
+        public virtual Empleado? Empleado { get; set; }
     }
 
 }

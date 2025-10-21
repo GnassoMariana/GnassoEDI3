@@ -1,28 +1,32 @@
 ﻿using GnassoEDI3.Applications;
 using GnassoEDI3.Entities;
+using GnassoEDI3.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplication1.Controllers
+namespace GnassoEDI3.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class EmpleadosController : ControllerBase
     {
         private readonly ILogger<EmpleadosController> _logger;
-        private readonly IApplication<Empleado> _empleado;
+        //private readonly IApplication<Empleado> _empleado;
+        private readonly IEmpleadoService _empleadoService;
 
-        public EmpleadosController(ILogger<EmpleadosController> logger, IApplication<Empleado> empleado)
+        public EmpleadosController(ILogger<EmpleadosController> logger, IEmpleadoService empleadoService)
         {
             _logger = logger;
-            _empleado = empleado;
+            //_empleado = empleado;
+            _empleadoService = empleadoService;
+
         }
 
         [HttpGet]
         [Route("All")]
         public async Task<IActionResult> All()
         {
-            return Ok(_empleado.GetAll());
+            return Ok(_empleadoService.GetEmpleado());
         }
 
         [HttpGet]
@@ -34,7 +38,7 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
 
-            Empleado empleado = _empleado.GetById(Id.Value);
+            Empleado empleado = _empleadoService.GetEmmpleadoById(Id.Value);
             if (empleado is null)
             {
                 return NotFound();
@@ -51,7 +55,7 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
 
-            _empleado.Save(empleado);
+            _empleadoService.SaveEmpleado(empleado);
             return Ok(empleado.Id);
         }
 
@@ -67,7 +71,7 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
 
-            Empleado empleadoBack = _empleado.GetById(Id.Value);
+            Empleado empleadoBack = _empleadoService.GetEmmpleadoById(Id.Value);
             if (empleadoBack is null)
             {
                 return NotFound();
@@ -81,7 +85,7 @@ namespace WebApplication1.Controllers
             empleadoBack.TrabajadorActivo = empleado.TrabajadorActivo;
             empleadoBack.Jornada = empleado.Jornada;
 
-            _empleado.Save(empleadoBack);
+            _empleadoService.SaveEmpleado(empleadoBack);
             return Ok(empleadoBack);
         }
 
@@ -98,13 +102,13 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
 
-            Empleado empleadoBack = _empleado.GetById(Id.Value);
+            Empleado empleadoBack = _empleadoService.GetEmmpleadoById(Id.Value);
             if (empleadoBack is null)
             {
                 return NotFound();
             }
 
-            _empleado.Delete(empleadoBack.Id);
+            _empleadoService.DeleteEmmpleado(empleadoBack.Id);
             return Ok();
         }
 

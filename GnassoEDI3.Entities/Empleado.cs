@@ -1,6 +1,7 @@
 ﻿using GnassoEDI3.Abstractions;
 using GnassoEDI3.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace GnassoEDI3.Entities
 {
@@ -41,11 +42,15 @@ namespace GnassoEDI3.Entities
         public DateTime FechaAlta { get; set; }
 
         //1-N
-        public virtual ICollection<RegistroAsistencia> Asistencias { get; set; }
-        public virtual ICollection<ReporteMensual> Reportes { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<RegistroAsistencia>? Asistencias { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<ReporteMensual>? Reportes { get; set; }
 
         // 1-1
-        public virtual Usuario Usuario { get; set; }
+        [JsonIgnore]
+        public virtual Usuario? Usuario { get; set; }
     }
 }
 
