@@ -5,6 +5,7 @@ using GnassoEDI3.Repository.IRepositories;
 using GnassoEDI3.Repository.Repositories;
 using GnassoEDI3.Services.Interfaces;
 using GnassoEDI3.Services.Services;
+using GnassoEDI3.Web.Mappers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(EmpleadoMappingProfile));
 
 
 builder.Services.AddDbContext<DbDataAccess>(options =>
@@ -20,7 +22,7 @@ builder.Services.AddDbContext<DbDataAccess>(options =>
     
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        o => o.MigrationsAssembly("GnassoEDI3.WebApi")
+        o => o.MigrationsAssembly("GnassoEDI3.Web")
     );
 
     
@@ -37,6 +39,12 @@ builder.Services.AddScoped<IEmpleadoService, EmpleadoService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IRegistroAsistenciaService, RegistroAsistenciaService>();
 builder.Services.AddScoped<IReporteMensualService, ReporteMensualService>();
+
+builder.Services.AddAutoMapper(typeof(EmpleadoMappingProfile));
+builder.Services.AddAutoMapper(typeof(RegistroAsistenciaMappingProfile));
+builder.Services.AddAutoMapper(typeof(ReporteMensualMappingProfile));
+builder.Services.AddAutoMapper(typeof(UsuarioMappingProfile));
+
 
 
 

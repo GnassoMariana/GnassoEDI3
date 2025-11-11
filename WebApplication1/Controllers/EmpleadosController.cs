@@ -1,10 +1,12 @@
-﻿using GnassoEDI3.Applications;
+﻿using AutoMapper;
+using GnassoEDI3.Application.DTOs.Empleado;
+using GnassoEDI3.Applications;
 using GnassoEDI3.Entities;
 using GnassoEDI3.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GnassoEDI3.WebApi.Controllers
+namespace GnassoEDI3.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -13,12 +15,14 @@ namespace GnassoEDI3.WebApi.Controllers
         private readonly ILogger<EmpleadosController> _logger;
         //private readonly IApplication<Empleado> _empleado;
         private readonly IEmpleadoService _empleadoService;
+        private readonly IMapper _mapper;
 
-        public EmpleadosController(ILogger<EmpleadosController> logger, IEmpleadoService empleadoService)
+        public EmpleadosController(ILogger<EmpleadosController> logger, IEmpleadoService empleadoService, IMapper mapper)
         {
             _logger = logger;
             //_empleado = empleado;
             _empleadoService = empleadoService;
+            _mapper = mapper;
 
         }
 
@@ -26,7 +30,9 @@ namespace GnassoEDI3.WebApi.Controllers
         [Route("All")]
         public async Task<IActionResult> All()
         {
-            return Ok(_empleadoService.GetEmpleado());
+            var empleados = _empleadoService.GetEmpleado();
+            return Ok(_mapper.Map<IList<EmpleadoResponseDto>>(empleados));
+            //return Ok(_empleadoService.GetEmpleado());
         }
 
         [HttpGet]
@@ -44,23 +50,24 @@ namespace GnassoEDI3.WebApi.Controllers
                 return NotFound();
             }
 
-            return Ok(empleado);
+            //return Ok(empleado);
+            return Ok(_mapper.Map<EmpleadoRequestDto>(empleado));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Crear(Empleado empleado)
+        public async Task<IActionResult> Crear(EmpleadoRequestDto empleadoRequest)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-
+            var empleado = _mapper.Map<Empleado>(empleadoRequest);
             _empleadoService.SaveEmpleado(empleado);
             return Ok(empleado.Id);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Editar(int? Id, Empleado empleado)
+        public async Task<IActionResult> Editar(int? Id, EmpleadoRequestDto empleadoRequest)
         {
             if (!Id.HasValue)
             {
@@ -77,16 +84,18 @@ namespace GnassoEDI3.WebApi.Controllers
                 return NotFound();
             }
 
-            empleadoBack.Nombre = empleado.Nombre;
-            empleadoBack.Apellido = empleado.Apellido;
-            empleadoBack.Dni = empleado.Dni;
-            empleadoBack.SalarioBase = empleado.SalarioBase;
-            empleadoBack.Antiguedad = empleado.Antiguedad;
-            empleadoBack.TrabajadorActivo = empleado.TrabajadorActivo;
-            empleadoBack.Jornada = empleado.Jornada;
+            //empleadoBack.Nombre = empleado.Nombre;
+            //empleadoBack.Apellido = empleado.Apellido;
+            //empleadoBack.Dni = empleado.Dni;
+            //empleadoBack.SalarioBase = empleado.SalarioBase;
+            //empleadoBack.Antiguedad = empleado.Antiguedad;
+            //empleadoBack.TrabajadorActivo = empleado.TrabajadorActivo;
+            //empleadoBack.Jornada = empleado.Jornada;
+            _mapper.Map(empleadoRequest, empleadoBack);
+
 
             _empleadoService.SaveEmpleado(empleadoBack);
-            return Ok(empleadoBack);
+            return Ok();
         }
 
         [HttpDelete]
