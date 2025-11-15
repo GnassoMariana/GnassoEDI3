@@ -48,9 +48,9 @@ namespace GnassoEDI3.Entities
         [JsonIgnore]
         public virtual ICollection<ReporteMensual>? Reportes { get; set; }
 
-        // 1-1
-        [JsonIgnore]
-        public virtual Usuario? Usuario { get; set; }
+        //// 1-1
+        //[JsonIgnore]
+        //public virtual Usuario? Usuario { get; set; }
     }
 }
 
