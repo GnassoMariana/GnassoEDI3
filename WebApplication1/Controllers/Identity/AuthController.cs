@@ -38,14 +38,14 @@ namespace GnassoEDI3.Web.Controllers.Identity
                     Nombres = user.Nombres,
                     Apellidos = user.Apellidos,
                     FechaNacimiento = user.FechaNacimiento
-                }, user.Password);
+                }, user.Contrasena);
                 if (Creado.Succeeded)
                 {
                     return Ok(new UserRegistroResponseDto
                     {
                         NombreCompleto = string.Join(" ", user.Nombres, user.Apellidos),
                         Email = user.Email,
-                        UserName = user.Email.Substring(0, user.Email.IndexOf('@'))
+                        NombreUsuario = user.Email.Substring(0, user.Email.IndexOf('@'))
                     });
                 }
                 else
@@ -77,14 +77,14 @@ namespace GnassoEDI3.Web.Controllers.Identity
                     Nombres = user.Nombres,
                     Apellidos = user.Apellidos,
                     FechaNacimiento = user.FechaNacimiento
-                }, user.Password).Result;
+                }, user.Contrasena).Result;
                 if (Creado.Succeeded)
                 {
                     return Ok(new UserRegistroResponseDto
                     {
                         NombreCompleto = string.Join(" ", user.Nombres, user.Apellidos),
                         Email = user.Email,
-                        UserName = user.Email.Substring(0, user.Email.IndexOf('@'))
+                        NombreUsuario = user.Email.Substring(0, user.Email.IndexOf('@'))
                     });
                 }
                 else

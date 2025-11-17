@@ -7,19 +7,12 @@ using System.Threading.Tasks;
 
 namespace GnassoEDI3.Application.DTOs.Identity
 {
-    public class UserRegistroRequestDto
+    public class LoginUserRequestDto
     {
         [Required]
-        public string Nombres { get; set; }
-        [Required]
-        public string Apellidos { get; set; }
-        [Required]
-        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]
         public string Contrasena { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime? FechaNacimiento { get; set; }
 
     }
 }

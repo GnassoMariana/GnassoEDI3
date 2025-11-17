@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
@@ -37,10 +38,6 @@
     <ProjectReference Include="..\GnassoEDI3.Applications\GnassoEDI3.Application.csproj" />
     <ProjectReference Include="..\GnassoEDI3.DataAccess\GnassoEDI3.DataAccess.csproj" />
     <ProjectReference Include="..\GnassoEDI3.Services\GnassoEDI3.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Configurations\" />
   </ItemGroup>
 
 </Project>
