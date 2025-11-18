@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace GnassoEDI3.Entities.MicrosoftIdentity
@@ -20,5 +21,11 @@ namespace GnassoEDI3.Entities.MicrosoftIdentity
         public string Apellidos { get; set; }
         [DataType(DataType.Date)]
         public DateTime? FechaNacimiento { get; set; }
+
+        //----------------- Relacion para asociar y firmar
+        public int? EmpleadoId { get; set; }
+
+        [JsonIgnore]
+        public Empleado? Empleado { get; set; }
     }
 }

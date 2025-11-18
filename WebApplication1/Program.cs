@@ -4,6 +4,7 @@ using GnassoEDI3.Abstractions;
 using GnassoEDI3.Applications;
 using GnassoEDI3.DataAccess;
 using GnassoEDI3.Entities.MicrosoftIdentity;
+using GnassoEDI3.Enums;
 using GnassoEDI3.Repository.IRepositories;
 using GnassoEDI3.Repository.Repositories;
 using GnassoEDI3.Services.AuthServices;
@@ -123,6 +124,21 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+///
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+
+    foreach (var rol in Enum.GetValues(typeof(Rol)))
+    {
+        var rolNombre = rol.ToString();
+        if (!await roleManager.RoleExistsAsync(rolNombre))
+        {
+            await roleManager.CreateAsync(new Role { Name = rolNombre });
+        }
+    }
+}
 
 app.Run();
 

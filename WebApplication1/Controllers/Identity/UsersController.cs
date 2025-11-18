@@ -1,4 +1,5 @@
 ﻿using GnassoEDI3.Entities.MicrosoftIdentity;
+using GnassoEDI3.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,19 +28,31 @@ namespace GnassoEDI3.Web.Controllers.Identity
 
         [HttpPost]
         [Route("AddRoleToUser")]
-        public async Task<IActionResult> Guardar(string userId, string roleId)
+        public async Task<IActionResult> Guardar(string userId, Rol rolEnum)
         {
             var user = _userManager.FindByIdAsync(userId).Result;
-            var role = _roleManager.FindByIdAsync(roleId).Result;
-            if (user is not null && role is not null)
+            //var role = _roleManager.FindByIdAsync(rolEnum).Result;
+            //if (user is not null && role is not null)
+            //{
+            //    var status = await _userManager.AddToRoleAsync(user, role.Name);
+            //    if (status.Succeeded)
+            //    {
+            //        return Ok(new { user = user.UserName, rol = role.Name });
+            //    }
+            //}
+            //return BadRequest(new { userId = userId, roleId = roleId });
+            if (user == null) return BadRequest("Usuario no encontrado.");
+
+            var rolAString = rolEnum.ToString();
+            var resultado = await _userManager.AddToRoleAsync (user, rolAString);
+            if(resultado.Succeeded)
             {
-                var status = await _userManager.AddToRoleAsync(user, role.Name);
-                if (status.Succeeded)
-                {
-                    return Ok(new { user = user.UserName, rol = role.Name });
-                }
+                return Ok(new {user = user.UserName, rolEnum = rolAString});
             }
-            return BadRequest(new { userId = userId, roleId = roleId });
+            else
+            {
+                return BadRequest(resultado.Errors.Select(e => e.Description));
+            }
         }
     }
 

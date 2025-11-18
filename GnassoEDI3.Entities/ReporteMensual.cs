@@ -17,6 +17,7 @@ namespace GnassoEDI3.Entities
             //Inicializar luego ReportesEpleados, AsistenciasMes
         }
 
+        #region Properties
         [Key]
         public int Id { get; set; }
 
@@ -24,9 +25,6 @@ namespace GnassoEDI3.Entities
         [Required]
         [ForeignKey(nameof(Empleado))]
         public int EmpleadoId { get; set; }
-
-        [JsonIgnore]
-        public virtual Empleado Empleado { get; set; }
 
         [Required]
         [Range(1, 12)]
@@ -48,7 +46,77 @@ namespace GnassoEDI3.Entities
         public int DiasRetraso { get; set; }
 
         public int DiasVacaciones { get; set; }
+        #endregion
 
+        #region Virtual
+        [JsonIgnore]
+        public virtual Empleado Empleado { get; set; }
+
+
+        #endregion
+
+        #region Setters y getters
+        public void SetEmpleadoId(int empleadoId)
+        {
+            if (empleadoId <= 0)
+                throw new ArgumentException("El Id del empleado no puede ser cero o negativo.");
+            EmpleadoId = empleadoId;
+        }
+
+        public void SetMes(int mes)
+        {
+            if (mes < 1 || mes > 12)
+                throw new ArgumentException("El mes debe estar entre 1 y 12.");
+            Mes = mes;
+        }
+
+        public void SetAnio(int anio)
+        {
+            if (anio < 1900 || anio > DateTime.Now.Year)
+                throw new ArgumentException($"El año debe ser entre 1900 y {DateTime.Now.Year}.");
+            Anio = anio;
+        }
+
+        public void SetHorasTotales(decimal horas)
+        {
+            if (horas < 0)
+                throw new ArgumentException("Las horas totales no pueden ser negativas.");
+            HorasTotales = horas;
+        }
+
+        public void SetSueldoFinal(decimal sueldo)
+        {
+            if (sueldo < 0)
+                throw new ArgumentException("El sueldo final no puede ser negativo.");
+            SueldoFinal = sueldo;
+        }
+
+        public void SetDiasAusencias(int dias)
+        {
+            if (dias < 0)
+                throw new ArgumentException("Los días de ausencias no pueden ser negativos.");
+            DiasAusencias = dias;
+        }
+
+        public void SetDiasRetraso(int dias)
+        {
+            if (dias < 0)
+                throw new ArgumentException("Los días de retraso no pueden ser negativos.");
+            DiasRetraso = dias;
+        }
+
+        public void SetDiasVacaciones(int dias)
+        {
+            if (dias < 0)
+                throw new ArgumentException("Los días de vacaciones no pueden ser negativos.");
+            DiasVacaciones = dias;
+        }
+
+        public void SetPremioAsistencia(bool premio)
+        {
+            PremioAsistencia = premio;
+        }
+        #endregion
     }
 }
 
