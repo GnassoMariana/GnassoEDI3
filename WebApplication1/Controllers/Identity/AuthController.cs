@@ -35,47 +35,45 @@ namespace GnassoEDI3.Web.Controllers.Identity
         [Route("Register")]
         public async Task<IActionResult> RegistrarUsuario([FromBody] UserRegistroRequestDto user)
         {
-            if (ModelState.IsValid)
-            {
-                var existeUsuario = await _userManager.FindByEmailAsync(user.Email);
-                if (existeUsuario != null)
-                {
-                    return BadRequest("Existe un usuario registrado con el mal " + user.Email + ".");
-                }
-                var Creado = await _userManager.CreateAsync(new User()
-                {
-                    Email = user.Email,
-                    UserName = user.Email.Substring(0, user.Email.IndexOf('@')),
-                    Nombres = user.Nombres,
-                    Apellidos = user.Apellidos,
-                    FechaNacimiento = user.FechaNacimiento,
-                    EmpleadoId = user.EmpleadoId     // <--- ASOCIACIÓN
-                }, user.Contrasena);
-                if (Creado.Succeeded)
-                {
-                    var nombreRol = Rol.Empleado.ToString(); // ejemplo
-                    var existeRol = await _roleManager.RoleExistsAsync(nombreRol);
-
-                    if (!existeRol)
-                        await _roleManager.CreateAsync(new Role { Name = nombreRol });
-
-                    await _userManager.AddToRoleAsync( user, nombreRol);
-                    return Ok(new UserRegistroResponseDto
-                    {
-                        NombreCompleto = string.Join(" ", user.Nombres, user.Apellidos),
-                        Email = user.Email,
-                        NombreUsuario = user.Email.Substring(0, user.Email.IndexOf('@'))
-                    });
-                }
-                else
-                {
-                    return BadRequest(Creado.Errors.Select(e => e.Description).ToList());
-                }
-            }
-            else
-            {
+            if (!ModelState.IsValid)
                 return BadRequest("Los datos enviados no son validos.");
-            }
+
+            var existeUsuario = await _userManager.FindByEmailAsync(user.Email);
+            if (existeUsuario != null)
+                return BadRequest("Existe un usuario registrado con el email " + user.Email + ".");
+
+            // Crear entidad User
+            var nuevoUser = new User()
+            {
+                Email = user.Email,
+                UserName = user.Email.Substring(0, user.Email.IndexOf('@')),
+                Nombres = user.Nombres,
+                Apellidos = user.Apellidos,
+                FechaNacimiento = user.FechaNacimiento,
+                EmpleadoId = user.EmpleadoId
+            };
+
+            // Crear usuario en Identity
+            var creado = await _userManager.CreateAsync(nuevoUser, user.Contrasena);
+
+            if (!creado.Succeeded)
+                return BadRequest(creado.Errors.Select(e => e.Description).ToList());
+
+            // Asignar Rol
+            var nombreRol = Rol.Empleado.ToString();
+
+            if (!await _roleManager.RoleExistsAsync(nombreRol))
+                await _roleManager.CreateAsync(new Role { Name = nombreRol });
+
+            await _userManager.AddToRoleAsync(nuevoUser, nombreRol);
+
+            // Respuesta
+            return Ok(new UserRegistroResponseDto
+            {
+                NombreCompleto = $"{user.Nombres} {user.Apellidos}",
+                Email = user.Email,
+                NombreUsuario = nuevoUser.UserName
+            });
         }
 
         [HttpPost]

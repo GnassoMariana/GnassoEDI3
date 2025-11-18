@@ -26,6 +26,6 @@ namespace GnassoEDI3.Entities.MicrosoftIdentity
         public int? EmpleadoId { get; set; }
 
         [JsonIgnore]
-        public Empleado? Empleado { get; set; }
+        public virtual Empleado? Empleado { get; set; }
     }
 }
