@@ -42,7 +42,7 @@ namespace GnassoEDI3.Web.Controllers.Identity
             if (existeUsuario != null)
                 return BadRequest("Existe un usuario registrado con el email " + user.Email + ".");
 
-            // Crear entidad User
+
             var nuevoUser = new User()
             {
                 Email = user.Email,
@@ -53,13 +53,12 @@ namespace GnassoEDI3.Web.Controllers.Identity
                 EmpleadoId = user.EmpleadoId
             };
 
-            // Crear usuario en Identity
+            
             var creado = await _userManager.CreateAsync(nuevoUser, user.Contrasena);
 
             if (!creado.Succeeded)
                 return BadRequest(creado.Errors.Select(e => e.Description).ToList());
 
-            // Asignar Rol
             var nombreRol = Rol.Empleado.ToString();
 
             if (!await _roleManager.RoleExistsAsync(nombreRol))
@@ -67,7 +66,7 @@ namespace GnassoEDI3.Web.Controllers.Identity
 
             await _userManager.AddToRoleAsync(nuevoUser, nombreRol);
 
-            // Respuesta
+          
             return Ok(new UserRegistroResponseDto
             {
                 NombreCompleto = $"{user.Nombres} {user.Apellidos}",
@@ -94,7 +93,7 @@ namespace GnassoEDI3.Web.Controllers.Identity
                     Nombres = user.Nombres,
                     Apellidos = user.Apellidos,
                     FechaNacimiento = user.FechaNacimiento,
-                    EmpleadoId = user.EmpleadoId     // <--- ASOCIACIÓN
+                    EmpleadoId = user.EmpleadoId     
                 }, user.Contrasena).Result;
                 if (Creado.Succeeded)
                 {
@@ -147,7 +146,7 @@ namespace GnassoEDI3.Web.Controllers.Identity
                                 Token = jwt,
                                 NombreUsuario = existeUsuario.UserName,
                                 Mail = existeUsuario.Email,
-                                 EmpleadoId = existeUsuario.EmpleadoId   // <--- agrega relacion
+                                 EmpleadoId = existeUsuario.EmpleadoId  
                             });
                         }
                         catch (Exception)

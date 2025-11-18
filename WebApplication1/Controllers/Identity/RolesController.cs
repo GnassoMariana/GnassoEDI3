@@ -64,7 +64,7 @@ namespace GnassoEDI3.Web.Controllers.Identity
 
         [HttpPut]
         [Route("Update")]
-        public IActionResult Modificar([FromBody] RoleRequestDto roleRequestDto, [FromQuery] Guid id)/*Falta */
+        public IActionResult Modificar([FromBody] RoleRequestDto roleRequestDto, [FromQuery] Guid id)
         {
             if (ModelState.IsValid)
             {

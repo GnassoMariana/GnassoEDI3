@@ -21,7 +21,7 @@ namespace GnassoEDI3.Application.DTOs.Identity
         [DataType(DataType.Date)]
         public DateTime? FechaNacimiento { get; set; }
 
-        //------------ Para vincular el usuario
+        
         [Required]
         public int EmpleadoId { get; set; }
 

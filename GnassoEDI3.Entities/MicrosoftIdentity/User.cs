@@ -22,7 +22,6 @@ namespace GnassoEDI3.Entities.MicrosoftIdentity
         [DataType(DataType.Date)]
         public DateTime? FechaNacimiento { get; set; }
 
-        //----------------- Relacion para asociar y firmar
         public int? EmpleadoId { get; set; }
 
         [JsonIgnore]

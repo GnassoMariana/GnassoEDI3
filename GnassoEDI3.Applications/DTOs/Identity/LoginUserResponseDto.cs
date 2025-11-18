@@ -13,7 +13,7 @@ namespace GnassoEDI3.Application.DTOs.Identity
         public string? Mail { get; set; }
         public bool Login { get; set; }
         public List<string> Errores { get; set; }
-        //----------- Para la relacion
+        
         public int? EmpleadoId { get; set; }
 
     }
