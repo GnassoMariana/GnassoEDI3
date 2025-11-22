@@ -22,8 +22,8 @@ namespace GnassoEDI3.Application.DTOs.Identity
         public DateTime? FechaNacimiento { get; set; }
 
         
-        [Required]
-        public int EmpleadoId { get; set; }
+        //[Required]
+        //public int EmpleadoId { get; set; }
 
     }
 }

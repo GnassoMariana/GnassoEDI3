@@ -1,4 +1,5 @@
 ﻿using GnassoEDI3.Abstractions;
+using GnassoEDI3.Entities.MicrosoftIdentity;
 using GnassoEDI3.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -47,11 +48,13 @@ namespace GnassoEDI3.Entities
         //1-N
 
         #region Virtuals
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual ICollection<RegistroAsistencia>? Asistencias { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual ICollection<ReporteMensual>? Reportes { get; set; }
+
+        //public virtual ICollection<User>? Usuarios { get; set; }
 
         //// 1-1
         //[JsonIgnore]

@@ -29,12 +29,12 @@ namespace GnassoEDI3.DataAccess
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-            //----------------- Para registrar la relacion con rol
-            modelBuilder.Entity<User>()
-                        .HasOne(u => u.Empleado)
-                        .WithOne()
-                        .HasForeignKey<User>(u => u.EmpleadoId)
-                        .OnDelete(DeleteBehavior.Restrict);
+            ////----------------- Para registrar la relacion con rol
+            //modelBuilder.Entity<User>()
+            //            .HasOne(u => u.Empleado)
+            //            .WithOne()
+            //            .HasForeignKey<User>(u => u.EmpleadoId)
+            //            .OnDelete(DeleteBehavior.Restrict);
 
         }
 

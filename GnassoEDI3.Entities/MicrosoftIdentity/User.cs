@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -21,10 +22,10 @@ namespace GnassoEDI3.Entities.MicrosoftIdentity
         public string Apellidos { get; set; }
         [DataType(DataType.Date)]
         public DateTime? FechaNacimiento { get; set; }
+        //[ForeignKey(nameof(Empleado))]
+        //public int? EmpleadoId { get; set; }
 
-        public int? EmpleadoId { get; set; }
-
-        [JsonIgnore]
-        public virtual Empleado? Empleado { get; set; }
+        ////[JsonIgnore]
+        //public virtual Empleado? Empleado { get; set; }
     }
 }

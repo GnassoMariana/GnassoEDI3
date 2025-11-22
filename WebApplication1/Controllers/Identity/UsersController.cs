@@ -1,4 +1,5 @@
-﻿using GnassoEDI3.Entities.MicrosoftIdentity;
+﻿using GnassoEDI3.Application.DTOs.Identity;
+using GnassoEDI3.Entities.MicrosoftIdentity;
 using GnassoEDI3.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -18,12 +19,12 @@ namespace GnassoEDI3.Web.Controllers.Identity
         private readonly UserManager<User> _userManager;
         private readonly ILogger<UsersController> _logger;
         public UsersController(RoleManager<Role> roleManager
-            , UserManager<User> userManage
+            , UserManager<User> userManager
             , ILogger<UsersController> logger)
         {
             _roleManager = roleManager;
             _logger = logger;
-            _userManager = userManage;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -53,6 +54,51 @@ namespace GnassoEDI3.Web.Controllers.Identity
             {
                 return BadRequest(resultado.Errors.Select(e => e.Description));
             }
+        }
+
+        [HttpGet("GetUsuarios")]
+        public async Task<ActionResult<List<UserRegistroResponseDto>>> GetUsuarios()
+        {
+            var users = _userManager.Users
+                .Select(u => new UserRegistroResponseDto
+                {
+                    //NombreCompleto = u.NombreCompleto,
+                    Email = u.Email,
+                    NombreUsuario = u.UserName
+                })
+                .ToList();
+
+            return Ok(users);
+        }
+        [AllowAnonymous]
+        [HttpPost("Regiatro")]
+        public async Task<ActionResult<UserRegistroResponseDto>> Registro([FromBody] UserRegistroRequestDto model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = new User
+            {
+                //NombreCompleto = model.NombreCompleto,
+                Email = model.Email,
+                UserName = model.Nombres,
+                NormalizedEmail = model.Email?.ToUpperInvariant(),
+                NormalizedUserName = model.Nombres?.ToUpperInvariant()
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Contrasena);
+            if (!result.Succeeded)
+            {
+                foreach (var err in result.Errors) ModelState.AddModelError(err.Code, err.Description);
+                return ValidationProblem(ModelState);
+            }
+            var dto = new UserRegistroResponseDto
+            {
+                //NombreCompleto = user.NombreCompleto,
+                Email = user.Email,
+                NombreUsuario = user.UserName
+            };
+
+            return CreatedAtAction(nameof(GetUsuarios), dto);
         }
     }
 

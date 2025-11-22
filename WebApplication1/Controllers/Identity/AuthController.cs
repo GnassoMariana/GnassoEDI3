@@ -50,7 +50,7 @@ namespace GnassoEDI3.Web.Controllers.Identity
                 Nombres = user.Nombres,
                 Apellidos = user.Apellidos,
                 FechaNacimiento = user.FechaNacimiento,
-                EmpleadoId = user.EmpleadoId
+                //EmpleadoId = user.EmpleadoId
             };
 
             
@@ -93,7 +93,7 @@ namespace GnassoEDI3.Web.Controllers.Identity
                     Nombres = user.Nombres,
                     Apellidos = user.Apellidos,
                     FechaNacimiento = user.FechaNacimiento,
-                    EmpleadoId = user.EmpleadoId     
+                    //EmpleadoId = user.EmpleadoId     
                 }, user.Contrasena).Result;
                 if (Creado.Succeeded)
                 {
@@ -146,7 +146,7 @@ namespace GnassoEDI3.Web.Controllers.Identity
                                 Token = jwt,
                                 NombreUsuario = existeUsuario.UserName,
                                 Mail = existeUsuario.Email,
-                                 EmpleadoId = existeUsuario.EmpleadoId  
+                                //EmpleadoId = existeUsuario.EmpleadoId  
                             });
                         }
                         catch (Exception)
