@@ -12,5 +12,6 @@ namespace GnassoEDI3.Repository.IRepositories
        
         Empleado GetByDni(string dni);
         IList<Empleado> GetActivos();
+        Empleado GetByUserId(Guid userId);
     }
 }

@@ -29,5 +29,10 @@ namespace GnassoEDI3.Repository.Repositories
         {
             return _context.Empleados.Where(e => e.TrabajadorActivo).ToList();
         }
+
+        public Empleado GetByUserId(Guid userId)
+        {
+            return _context.Empleados.FirstOrDefault(e => e.UserId == userId);
+        }
     }
 }

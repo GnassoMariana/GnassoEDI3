@@ -16,50 +16,44 @@ namespace GnassoEDI3.Web.Controllers.Identity
     public class RolesController : ControllerBase
     {
         private readonly RoleManager<Role> _roleManager;
-        private readonly ILogger<EmpleadosController> _logger;
+        private readonly ILogger<RolesController> _logger;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
         public RolesController(RoleManager<Role> roleManager
-            , ILogger<EmpleadosController> logger
-            , IMapper mapper)
+            , ILogger<RolesController> logger
+            , IMapper mapper, UserManager<User> userManager)
         {
             _roleManager = roleManager;
             _logger = logger;
             _mapper = mapper;
+            _userManager = userManager;
         }
         [HttpGet]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(_mapper.Map<IList<RoleResponseDto>>(_roleManager.Roles.ToList()));
+            var roles = _roleManager.Roles.ToList();
+            var dto = _mapper.Map<IList<RoleResponseDto>>(roles);
+            return Ok(dto);
+            //return Ok(_mapper.Map<IList<RoleResponseDto>>(_roleManager.Roles.ToList()));
         }
 
         [HttpPost]
         [Route("Create")]
-        public IActionResult Guardar(RoleRequestDto roleRequestDto)
+        public async Task<IActionResult> Guardar([FromBody] RoleRequestDto roleRequestDto)
         {
-            if (ModelState.IsValid)
-            {
-                var userId = Guid.Parse(User.FindFirst("Id")?.Value);
-                try
-                {
-                    var role = _mapper.Map<Role>(roleRequestDto);
-                    var result = _roleManager.CreateAsync(role).Result;
-                    if (result.Succeeded)
-                    {
-                        return Ok(role.Id);
-                    }
-                    return Problem(detail: result.Errors.First().Description, instance: role.Name, statusCode: StatusCodes.Status409Conflict);
-                }
-                catch (Exception)
-                {
+            if (!ModelState.IsValid) return BadRequest("Datos inválidos.");
 
-                    throw;
-                }
-            }
-            else
-            {
-                return BadRequest("Los datos enviados no son validos.");
-            }
+            var role = _mapper.Map<Role>(roleRequestDto);
+            if (string.IsNullOrWhiteSpace(role.Name)) return BadRequest("Nombre de rol obligatorio.");
+
+            var exists = await _roleManager.RoleExistsAsync(role.Name);
+            if (exists) return Conflict($"El rol '{role.Name}' ya existe.");
+
+            var result = await _roleManager.CreateAsync(role);
+            if (!result.Succeeded) return Problem(detail: result.Errors.First().Description, instance: role.Name, statusCode: StatusCodes.Status409Conflict);
+
+            return Ok(role.Id);
         }
 
         [HttpPut]
@@ -112,6 +106,34 @@ namespace GnassoEDI3.Web.Controllers.Identity
             {
                 return Conflict();
             }
+        }
+
+        [HttpPost("AssignToUser")]
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> AssignToUser([FromBody] RoleAssignDto dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.UserId) || string.IsNullOrWhiteSpace(dto.RoleName))
+                return BadRequest("UserId y RoleName son obligatorios.");
+
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+            if (user == null) return NotFound("Usuario no encontrado.");
+
+            if (!await _roleManager.RoleExistsAsync(dto.RoleName))
+                await _roleManager.CreateAsync(new Role { Name = dto.RoleName });
+
+            if (await _userManager.IsInRoleAsync(user, dto.RoleName))
+                return BadRequest("Usuario ya tiene ese rol.");
+
+            var res = await _userManager.AddToRoleAsync(user, dto.RoleName);
+            if (!res.Succeeded) return BadRequest(res.Errors.Select(e => e.Description));
+
+            return Ok(new { user = user.UserName, role = dto.RoleName });
+        }
+
+        public class RoleAssignDto
+        {
+            public string UserId { get; set; } = string.Empty;
+            public string RoleName { get; set; } = string.Empty;
         }
 
     }

@@ -125,21 +125,21 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-///
-//using (var scope = app.Services.CreateScope())
-//{
-//    var serviceProvider = scope.ServiceProvider;
-//    var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
 
-//    foreach (var rol in Enum.GetValues(typeof(Rol)))
-//    {
-//        var rolNombre = rol.ToString();
-//        if (!await roleManager.RoleExistsAsync(rolNombre))
-//        {
-//            await roleManager.CreateAsync(new Role { Name = rolNombre });
-//        }
-//    }
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+
+    foreach (var rol in Enum.GetValues(typeof(Rol)))
+    {
+        var rolNombre = rol.ToString();
+        if (!await roleManager.RoleExistsAsync(rolNombre))
+        {
+            await roleManager.CreateAsync(new Role { Name = rolNombre });
+        }
+    }
+}
 
 app.Run();
 

@@ -139,7 +139,8 @@ namespace GnassoEDI3.Web.Controllers.Identity
                                 NombreUsuario = existeUsuario.UserName,
                                 Email = existeUsuario.Email
                             };
-                            var jwt = _servicioToken.GenerateJwtTokens(parametros);
+                            var roles = await _userManager.GetRolesAsync(existeUsuario);
+                            var jwt = _servicioToken.GenerateJwtTokens(parametros, roles);
                             return Ok(new LoginUserResponseDto()
                             {
                                 Login = true,

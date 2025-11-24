@@ -2,6 +2,7 @@
 using GnassoEDI3.Entities.MicrosoftIdentity;
 using GnassoEDI3.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -19,6 +20,11 @@ namespace GnassoEDI3.Entities
         #region Properties
         [Key]
         public int Id { get; set; }
+
+        public Guid? UserId { get; set; }
+
+        [ForeignKey(nameof(UserId))]
+        public virtual User? User { get; set; }
 
         [Required]
         [StringLength(30)]
