@@ -4,6 +4,7 @@ using GnassoEDI3.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GnassoEDI3.WebApi.Migrations
 {
     [DbContext(typeof(DbDataAccess))]
-    partial class DbDataAccessModelSnapshot : ModelSnapshot
+    [Migration("20251118230224_autenticacion")]
+    partial class autenticacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,12 +66,7 @@ namespace GnassoEDI3.WebApi.Migrations
                     b.Property<bool>("TrabajadorActivo")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Empleados");
                 });
@@ -150,6 +148,9 @@ namespace GnassoEDI3.WebApi.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("EmpleadoId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("FechaNacimiento")
                         .HasColumnType("datetime2");
 
@@ -192,6 +193,10 @@ namespace GnassoEDI3.WebApi.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmpleadoId")
+                        .IsUnique()
+                        .HasFilter("[EmpleadoId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -358,15 +363,6 @@ namespace GnassoEDI3.WebApi.Migrations
                     b.ToTable("ReportesMensuales");
                 });
 
-            modelBuilder.Entity("GnassoEDI3.Entities.Empleado", b =>
-                {
-                    b.HasOne("GnassoEDI3.Entities.MicrosoftIdentity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("GnassoEDI3.Entities.MicrosoftIdentity.RoleClaim", b =>
                 {
                     b.HasOne("GnassoEDI3.Entities.MicrosoftIdentity.Role", null)
@@ -374,6 +370,16 @@ namespace GnassoEDI3.WebApi.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GnassoEDI3.Entities.MicrosoftIdentity.User", b =>
+                {
+                    b.HasOne("GnassoEDI3.Entities.Empleado", "Empleado")
+                        .WithOne()
+                        .HasForeignKey("GnassoEDI3.Entities.MicrosoftIdentity.User", "EmpleadoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Empleado");
                 });
 
             modelBuilder.Entity("GnassoEDI3.Entities.MicrosoftIdentity.UserClaim", b =>

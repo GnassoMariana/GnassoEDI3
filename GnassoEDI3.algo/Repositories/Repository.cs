@@ -24,11 +24,20 @@ namespace GnassoEDI3.Repository.Repositories
                 _dbSet.Remove(entity);
                 _context.SaveChanges();
             }
+            //_context.Delete(id);
         }
 
-        public virtual IList<T> GetAll() => _dbSet.ToList();
+        public virtual IList<T> GetAll()
+        {
+            //return _context.GetAll();
+            return _dbSet.ToList();
+        }
 
-        public virtual T GetById(int id) => _dbSet.FirstOrDefault(e => e.Id == id)!;
+        public virtual T GetById(int id)
+        {
+            //return _context.GetById(id);
+            return _dbSet.FirstOrDefault(e => e.Id == id)!;
+        }
 
 
         public virtual T Save(T entity)
@@ -37,6 +46,7 @@ namespace GnassoEDI3.Repository.Repositories
             else _dbSet.Update(entity);
             _context.SaveChanges();
             return entity;
+            //return _context.Save(entity);
         }
     }
 }

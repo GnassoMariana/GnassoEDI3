@@ -12,5 +12,7 @@ namespace GnassoEDI3.Repository.IRepositories
         IList<RegistroAsistencia> GetByEmpleado(int empleadoId);
         IList<RegistroAsistencia> GetByMes(int empleadoId, int mes, int anio);
         decimal CalcularHorasTotales(int empleadoId, int mes, int anio);
+
+        Task<RegistroAsistencia> FirmarEntradaAsync(Guid userGuid);
     }
 }

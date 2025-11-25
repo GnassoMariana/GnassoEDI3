@@ -13,5 +13,6 @@ namespace GnassoEDI3.Services.Interfaces
         RegistroAsistencia GetRegistroAsistenciaById(int id);
         RegistroAsistencia SaveRegistroAsistencia(RegistroAsistencia registro);
         void DeleteRegistroAsistencia(int id);
+        Task<RegistroAsistencia> FirmarEntradaAsync(Guid userGuid);
     }
 }

@@ -37,5 +37,10 @@ namespace GnassoEDI3.Services.Services
         {
             _registroRepository.Delete(id);
         }
+
+        public Task<RegistroAsistencia> FirmarEntradaAsync(Guid userGuid)
+        {
+            return _registroRepository.FirmarEntradaAsync(userGuid);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GnassoEDI3.DataAccess;
+﻿using GnassoEDI3.Abstractions;
+using GnassoEDI3.DataAccess;
 using GnassoEDI3.Entities;
 using GnassoEDI3.Repository.IRepositories;
 using System;
@@ -12,6 +13,7 @@ namespace GnassoEDI3.Repository.Repositories
     public class EmpleadoRepository : Repository<Empleado>, IEmpleadoRepository
     {
         private readonly DbDataAccess _context;
+        //private readonly IDbContext _context;
 
         public EmpleadoRepository(DbDataAccess context) : base(context)
         {
@@ -26,6 +28,11 @@ namespace GnassoEDI3.Repository.Repositories
         public IList<Empleado> GetActivos()
         {
             return _context.Empleados.Where(e => e.TrabajadorActivo).ToList();
+        }
+
+        public Empleado GetByUserId(Guid userId)
+        {
+            return _context.Empleados.FirstOrDefault(e => e.UserId == userId);
         }
     }
 }
